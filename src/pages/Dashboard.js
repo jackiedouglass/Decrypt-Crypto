@@ -86,6 +86,7 @@ const Dashboard = (props) => {
       <AddCoin
         addCoinModal={addCoinModal}
         openAddCoinModal={openAddCoinModal}
+        username={props.username}
       />
       <Box
         sx={{
