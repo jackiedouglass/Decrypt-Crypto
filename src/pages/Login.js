@@ -1,4 +1,7 @@
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -13,9 +16,48 @@ import {
 } from '@material-ui/core';
 import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
+import { updateUserInfoActionCreator } from '../actions/actions';
 
-const Login = () => {
+const mapDispatchToProps = (dispatch) => ({
+  updateUserInfo: (userData) => dispatch(updateUserInfoActionCreator(userData))
+});
+
+const Login = (props) => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    console.log(email, password);
+    const loginOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: email, password })
+    };
+    fetch(
+      'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/login',
+      loginOptions
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status) {
+          console.log(data);
+          const userData = {
+            username: data.username,
+            coinList: data.CoinList,
+            cashedOutAmnt: data.CashedOutAmnt
+          };
+          props.updateUserInfo(userData);
+          navigate('/app/dashboard');
+        } else {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate('/register');
+      });
+  };
 
   return (
     <>
@@ -38,7 +80,10 @@ const Login = () => {
               password: 'Password123'
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+              email: Yup.string()
+                .email('Must be a valid email')
+                .max(255)
+                .required('Email is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
             onSubmit={() => {
@@ -54,12 +99,9 @@ const Login = () => {
               touched,
               values
             }) => (
-              <form onSubmit={handleSubmit}>
+              <>
                 <Box sx={{ mb: 3 }}>
-                  <Typography
-                    color="textPrimary"
-                    variant="h2"
-                  >
+                  <Typography color="textPrimary" variant="h2">
                     Sign in
                   </Typography>
                   <Typography
@@ -70,15 +112,8 @@ const Login = () => {
                     Sign in on the internal platform
                   </Typography>
                 </Box>
-                <Grid
-                  container
-                  spacing={3}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
                     <Button
                       color="primary"
                       fullWidth
@@ -90,11 +125,7 @@ const Login = () => {
                       Login with Facebook
                     </Button>
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
+                  <Grid item xs={12} md={6}>
                     <Button
                       fullWidth
                       startIcon={<GoogleIcon />}
@@ -128,9 +159,12 @@ const Login = () => {
                   margin="normal"
                   name="email"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    setEmail(e.target.value);
+                  }}
                   type="email"
-                  value={values.email}
+                  value={email}
                   variant="outlined"
                 />
                 <TextField
@@ -141,9 +175,11 @@ const Login = () => {
                   margin="normal"
                   name="password"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                   type="password"
-                  value={values.password}
+                  value={password}
                   variant="outlined"
                 />
                 <Box sx={{ py: 2 }}>
@@ -154,25 +190,18 @@ const Login = () => {
                     size="large"
                     type="submit"
                     variant="contained"
+                    onClick={handleLogin}
                   >
                     Sign in now
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
+                <Typography color="textSecondary" variant="body1">
+                  Don&apos;t have an account?{' '}
+                  <Link component={RouterLink} to="/register" variant="h6">
                     Sign up
                   </Link>
                 </Typography>
-              </form>
+              </>
             )}
           </Formik>
         </Container>
@@ -181,4 +210,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default connect(null, mapDispatchToProps)(Login);

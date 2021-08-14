@@ -1,5 +1,7 @@
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
@@ -12,14 +14,46 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import { updateUserInfoActionCreator } from '../actions/actions';
 
-const Register = () => {
+const mapDispatchToProps = (dispatch) => ({
+  updateUserInfo: (userData) => dispatch(updateUserInfoActionCreator(userData))
+});
+
+const Register = (props) => {
   const navigate = useNavigate();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  function handleSignUp() {
+    console.log(username, password);
+    const signupOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    };
+    fetch(
+      'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/signup',
+      signupOptions
+    )
+      .then((data) => {
+        const userData = {
+          username,
+          userCoinList: [],
+          userCashedOut: 0
+        };
+        props.updateUserInfo(userData);
+        navigate('/app/dashboard');
+      })
+      .catch((err) => console.error(err));
+  }
 
   return (
     <>
       <Helmet>
-        <title>Register | Material Kit</title>
+        <title>Register | Decrypt Crypto</title>
       </Helmet>
       <Box
         sx={{
@@ -39,15 +73,18 @@ const Register = () => {
               password: '',
               policy: false
             }}
-            validationSchema={
-              Yup.object().shape({
-                email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                firstName: Yup.string().max(255).required('First name is required'),
-                lastName: Yup.string().max(255).required('Last name is required'),
-                password: Yup.string().max(255).required('password is required'),
-                policy: Yup.boolean().oneOf([true], 'This field must be checked')
-              })
-            }
+            validationSchema={Yup.object().shape({
+              email: Yup.string()
+                .email('Must be a valid email')
+                .max(255)
+                .required('Email is required'),
+              firstName: Yup.string()
+                .max(255)
+                .required('First name is required'),
+              lastName: Yup.string().max(255).required('Last name is required'),
+              password: Yup.string().max(255).required('password is required'),
+              policy: Yup.boolean().oneOf([true], 'This field must be checked')
+            })}
             onSubmit={() => {
               navigate('/app/dashboard', { replace: true });
             }}
@@ -61,12 +98,9 @@ const Register = () => {
               touched,
               values
             }) => (
-              <form onSubmit={handleSubmit}>
+              <>
                 <Box sx={{ mb: 3 }}>
-                  <Typography
-                    color="textPrimary"
-                    variant="h2"
-                  >
+                  <Typography color="textPrimary" variant="h2">
                     Create new account
                   </Typography>
                   <Typography
@@ -85,8 +119,10 @@ const Register = () => {
                   margin="normal"
                   name="firstName"
                   onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.firstName}
+                  onChange={(e) => {
+                    setFirstName(e.target.value);
+                  }}
+                  value={firstName}
                   variant="outlined"
                 />
                 <TextField
@@ -97,8 +133,8 @@ const Register = () => {
                   margin="normal"
                   name="lastName"
                   onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  value={lastName}
                   variant="outlined"
                 />
                 <TextField
@@ -109,9 +145,9 @@ const Register = () => {
                   margin="normal"
                   name="email"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e) => setUsername(e.target.value)}
                   type="email"
-                  value={values.email}
+                  value={username}
                   variant="outlined"
                 />
                 <TextField
@@ -122,9 +158,9 @@ const Register = () => {
                   margin="normal"
                   name="password"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e) => setPassword(e.target.value)}
                   type="password"
-                  value={values.password}
+                  value={password}
                   variant="outlined"
                 />
                 <Box
@@ -139,12 +175,8 @@ const Register = () => {
                     name="policy"
                     onChange={handleChange}
                   />
-                  <Typography
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    I have read the
-                    {' '}
+                  <Typography color="textSecondary" variant="body1">
+                    I have read the{' '}
                     <Link
                       color="primary"
                       component={RouterLink}
@@ -157,9 +189,7 @@ const Register = () => {
                   </Typography>
                 </Box>
                 {Boolean(touched.policy && errors.policy) && (
-                  <FormHelperText error>
-                    {errors.policy}
-                  </FormHelperText>
+                  <FormHelperText error>{errors.policy}</FormHelperText>
                 )}
                 <Box sx={{ py: 2 }}>
                   <Button
@@ -169,25 +199,18 @@ const Register = () => {
                     size="large"
                     type="submit"
                     variant="contained"
+                    onClick={handleSignUp}
                   >
                     Sign up now
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/login"
-                    variant="h6"
-                  >
+                <Typography color="textSecondary" variant="body1">
+                  Have an account?{' '}
+                  <Link component={RouterLink} to="/login" variant="h6">
                     Sign in
                   </Link>
                 </Typography>
-              </form>
+              </>
             )}
           </Formik>
         </Container>
@@ -196,4 +219,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default connect(null, mapDispatchToProps)(Register);
