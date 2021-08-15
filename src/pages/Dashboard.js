@@ -12,6 +12,7 @@ import PortfolioBalance from 'src/components/dashboard/PortfolioBalance';
 import PortfolioProfits from 'src/components/dashboard/PortfolioProfits';
 import TrafficByDevice from 'src/components/dashboard//TrafficByDevice';
 import AddCoin from 'src/components/modals/AddCoin';
+import CoinCard from 'src/components/coin/CoinCard';
 import * as actions from '../actions/actions';
 
 const useStyles = makeStyles((theme) => ({
@@ -78,6 +79,24 @@ const Dashboard = (props) => {
     totalInvested += Number(currCoin.totalCoinInvested);
     portfolioBalance += Number(currCoin.coinBalance);
   }
+
+  const coinDisplay = props.coinList.map((coin, i) => {
+    const searchId = coin.name.toLowerCase();
+    return (
+      <Grid item lg={4} sm={6} xl={4} xs={12}>
+        <CoinCard
+          username={props.username}
+          searchId={searchId}
+          addChart={props.addChart}
+          showChart={props.showChart}
+          fullList={props.coinList}
+          buyMore={props.buyMore}
+          soldQuantity={props.soldQuantity}
+          coinInfo={coin}
+        />
+      </Grid>
+    );
+  });
   return (
     <>
       <Helmet>
@@ -117,6 +136,8 @@ const Dashboard = (props) => {
             <Grid item lg={3} sm={6} xl={3} xs={12}>
               <CashedOut cashedOutAmnt={props.cashedOutAmnt} />
             </Grid>
+
+            {coinDisplay}
 
             <Grid item lg={8} md={12} xl={9} xs={12}>
               <Sales />
