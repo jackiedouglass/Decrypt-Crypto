@@ -53,7 +53,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function AddCoin({ addCoinModal, openAddCoinModal, username }) {
+export default function AddCoin({
+  addCoinModal,
+  openAddCoinModal,
+  username,
+  addCoin
+}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [coin, setCoin] = useState('');
@@ -83,24 +88,22 @@ export default function AddCoin({ addCoinModal, openAddCoinModal, username }) {
       price,
       username
     };
-    console.log(bodyObj);
-    // fetch(
-    //   'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/addcoin',
-    //   {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(bodyObj)
-    //   }
-    // )
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     // props.addCoin({ ...data, coinCode: bodyObj.coin });
-    //     // console.log(props.fullList);
-    //     openAddCoinModal(false);
-    //   })
-    //   .catch((error) => console.log('Error: ', error));
+    fetch(
+      'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/addcoin',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bodyObj)
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        addCoin({ ...data, coinCode: bodyObj.coin });
+        openAddCoinModal(false);
+      })
+      .catch((error) => console.log('Error: ', error));
   };
   return (
     <Dialog

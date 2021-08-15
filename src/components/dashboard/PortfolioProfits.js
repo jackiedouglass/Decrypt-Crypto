@@ -2,7 +2,7 @@ import { Avatar, Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { indigo } from '@material-ui/core/colors';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
-const TotalProfit = (props) => (
+const PortfolioProfits = (props) => (
   <Card {...props}>
     <CardContent>
       <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
@@ -30,4 +30,4 @@ const TotalProfit = (props) => (
   </Card>
 );
 
-export default TotalProfit;
+export default PortfolioProfits;

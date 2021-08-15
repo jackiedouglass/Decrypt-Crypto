@@ -10,7 +10,7 @@ import { green } from '@material-ui/core/colors';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 
-const TotalCustomers = (props) => (
+const PortfolioBalance = (props) => (
   <Card {...props}>
     <CardContent>
       <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
@@ -59,4 +59,4 @@ const TotalCustomers = (props) => (
   </Card>
 );
 
-export default TotalCustomers;
+export default PortfolioBalance;

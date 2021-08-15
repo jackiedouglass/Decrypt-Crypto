@@ -3,13 +3,13 @@ import { Box, Container, Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import Budget from 'src/components/dashboard//Budget';
+import TotalInvested from 'src/components/dashboard/TotalInvested';
 import LatestOrders from 'src/components/dashboard//LatestOrders';
 import LatestProducts from 'src/components/dashboard//LatestProducts';
 import Sales from 'src/components/dashboard//Sales';
-import TasksProgress from 'src/components/dashboard//TasksProgress';
-import TotalCustomers from 'src/components/dashboard//TotalCustomers';
-import TotalProfit from 'src/components/dashboard//TotalProfit';
+import CashedOut from 'src/components/dashboard/CashedOut';
+import PortfolioBalance from 'src/components/dashboard/PortfolioBalance';
+import PortfolioProfits from 'src/components/dashboard/PortfolioProfits';
 import TrafficByDevice from 'src/components/dashboard//TrafficByDevice';
 import AddCoin from 'src/components/modals/AddCoin';
 import * as actions from '../actions/actions';
@@ -87,6 +87,7 @@ const Dashboard = (props) => {
         addCoinModal={addCoinModal}
         openAddCoinModal={openAddCoinModal}
         username={props.username}
+        addCoin={props.addCoin}
       />
       <Box
         sx={{
@@ -98,19 +99,23 @@ const Dashboard = (props) => {
         <Container maxWidth={false}>
           <Grid container spacing={3}>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <Budget totalInvested={totalInvested} />
+              <TotalInvested totalInvested={totalInvested.toFixed(4)} />
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <TotalCustomers portfolioBalance={portfolioBalance} />
+              <PortfolioBalance
+                portfolioBalance={portfolioBalance.toFixed(4)}
+              />
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <TotalProfit
-                totalProfits={Number(portfolioBalance - totalInvested)}
+              <PortfolioProfits
+                totalProfits={Number(portfolioBalance - totalInvested).toFixed(
+                  4
+                )}
                 sx={{ height: '100%' }}
               />
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <TasksProgress cashedOutAmnt={props.cashedOutAmnt} />
+              <CashedOut cashedOutAmnt={props.cashedOutAmnt} />
             </Grid>
 
             <Grid item lg={8} md={12} xl={9} xs={12}>

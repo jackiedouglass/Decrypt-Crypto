@@ -10,7 +10,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MoneyIcon from '@material-ui/icons/Money';
 import { red } from '@material-ui/core/colors';
 
-const Budget = (props) => (
+const TotalInvested = (props) => (
   <Card sx={{ height: '100%' }} {...props}>
     <CardContent>
       <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
@@ -59,4 +59,4 @@ const Budget = (props) => (
   </Card>
 );
 
-export default Budget;
+export default TotalInvested;
