@@ -4,8 +4,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { Bar, Line } from 'react-chartjs-2';
+import { useState, useEffect } from 'react';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  useTheme,
+  colors
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   // paper: {
@@ -33,56 +43,125 @@ const useStyles = makeStyles((theme) => ({
   // pageText: {
   //   color: '#2A3C4A'
   // }
+  chartDisplay: { minWidth: '800px' }
 }));
 
-export default function ShowChart({ addCoinModal, openAddCoinModal }) {
+export default function ShowChart({ chart, showChart, coinInfo, searchId }) {
   const classes = useStyles();
+  const theme = useTheme();
+  const [data, setData] = useState({});
 
-  const handleSubmit = () => {
-    console.log('true');
-    openAddCoinModal(false);
+  const options = {
+    animation: false,
+    layout: { padding: 0 },
+    legend: { display: false },
+    responsive: true,
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            fontColor: theme.palette.text.secondary
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          }
+        }
+      ],
+      yAxes: [
+        {
+          ticks: {
+            fontColor: theme.palette.text.secondary
+          },
+          gridLines: {
+            borderDash: [2],
+            borderDashOffset: [2],
+            color: theme.palette.divider,
+            drawBorder: false,
+            zeroLineBorderDash: [2],
+            zeroLineBorderDashOffset: [2],
+            zeroLineColor: theme.palette.divider
+          }
+        }
+      ]
+    },
+    tooltips: {
+      backgroundColor: theme.palette.background.paper,
+      bodyFontColor: theme.palette.text.secondary,
+      borderColor: theme.palette.divider,
+      borderWidth: 1,
+      enabled: true,
+      footerFontColor: theme.palette.text.secondary,
+      intersect: false,
+      mode: 'index',
+      titleFontColor: theme.palette.text.primary
+    }
   };
+  const getHourArr = (currHour) => {
+    let labelArr = [];
+    let hour = currHour;
+    while (labelArr.length < 25) {
+      if (hour < 0) hour = 24;
+      labelArr.unshift(`${hour}:00`);
+      hour -= 1;
+    }
+    return labelArr;
+  };
+
+  useEffect(() => {
+    const today = new Date();
+    let currHour = today.getHours();
+    const hourLabels = getHourArr(currHour);
+
+    fetch(
+      `https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/getchart?id=${searchId}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const priceArr = data.prices.map((price) => price[1]);
+        setData({
+          labels: hourLabels,
+          datasets: [
+            {
+              label: coinInfo.name,
+              data: priceArr,
+              backgroundColor: colors.indigo[500]
+            }
+          ]
+        });
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <Dialog
-      open={addCoinModal}
-      onClose={handleSubmit}
+      open={chart}
+      onClose={() => {
+        showChart(false);
+      }}
       aria-labelledby="form-dialog-title"
+      className={classes.chartDisplay}
+      maxWidth="md"
+      fullWidth={true}
     >
-      <DialogTitle id="form-dialog-title" className={classes.pageText}>
-        Verify Your Email
+      <DialogTitle
+        id="form-dialog-title"
+        className={classes.pageText}
+        variant="h3"
+      >
+        View the price history for {coinInfo.name} over the past 24 hours.
       </DialogTitle>
       <DialogContent>
-        <DialogContentText className={classes.pageText}>
-          Enter the verification code emailed to you. If you don't receive it in
-          the next few minutes, please check your spam folder.
-        </DialogContentText>
-        {/* {incorrectVerificationCode && (
-        <Typography style={{ color: 'red' }}>
-          Please double-check you entered in the correct verification code.
-        </Typography>
-      )} */}
-        <TextField
-          autoFocus
-          margin="dense"
-          id="verifCode"
-          label="Verification Code"
-          fullWidth
-          // onChange={(e) => {
-          //   setVerificationCode(e.target.value);
-          // }}
-        />
+        <Line data={data} options={options} />
       </DialogContent>
       <DialogActions>
         <Button
           onClick={() => {
-            openAddCoinModal(false);
+            showChart(false);
           }}
           className={classes.submit}
         >
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} className={classes.submit}>
-          Add Coin
+          Close
         </Button>
       </DialogActions>
     </Dialog>
