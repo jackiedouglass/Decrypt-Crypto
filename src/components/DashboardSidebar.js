@@ -31,7 +31,7 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/app/customers',
+    href: '/app/prices',
     icon: AttachMoneyIcon,
     title: 'Prices'
   }
