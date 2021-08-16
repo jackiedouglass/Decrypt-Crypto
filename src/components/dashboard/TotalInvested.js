@@ -34,7 +34,7 @@ const TotalInvested = (props) => (
           </Avatar>
         </Grid>
       </Grid>
-      <Box
+      {/* <Box
         sx={{
           pt: 2,
           display: 'flex',
@@ -54,7 +54,7 @@ const TotalInvested = (props) => (
         <Typography color="textSecondary" variant="caption">
           Since last month
         </Typography>
-      </Box>
+      </Box> */}
     </CardContent>
   </Card>
 );

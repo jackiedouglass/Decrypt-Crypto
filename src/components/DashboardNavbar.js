@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
 import {
   AppBar,
   Badge,
@@ -14,21 +15,23 @@ import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from './Logo';
 
+const useStyles = makeStyles((theme) => ({
+  logoutLink: { color: 'inherit' }
+}));
+
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [notifications] = useState([]);
+  const classes = useStyles();
 
   return (
-    <AppBar
-      elevation={0}
-      {...rest}
-    >
+    <AppBar elevation={0} {...rest}>
       <Toolbar>
         <RouterLink to="/">
           <Logo />
         </RouterLink>
         <Box sx={{ flexGrow: 1 }} />
         <Hidden lgDown>
-          <IconButton color="inherit">
+          {/* <IconButton color="inherit">
             <Badge
               badgeContent={notifications.length}
               color="primary"
@@ -36,18 +39,12 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
             >
               <NotificationsIcon />
             </Badge>
-          </IconButton>
-          <IconButton color="inherit">
-            <InputIcon />
-          </IconButton>
-        </Hidden>
-        <Hidden lgUp>
-          <IconButton
-            color="inherit"
-            onClick={onMobileNavOpen}
-          >
-            <MenuIcon />
-          </IconButton>
+          </IconButton> */}
+          <RouterLink to="/" className={classes.logoutLink}>
+            <IconButton color="inherit">
+              <InputIcon />
+            </IconButton>
+          </RouterLink>
         </Hidden>
       </Toolbar>
     </AppBar>

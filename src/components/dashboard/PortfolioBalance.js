@@ -34,7 +34,7 @@ const PortfolioBalance = (props) => (
           </Avatar>
         </Grid>
       </Grid>
-      <Box
+      {/* <Box
         sx={{
           alignItems: 'center',
           display: 'flex',
@@ -54,7 +54,7 @@ const PortfolioBalance = (props) => (
         <Typography color="textSecondary" variant="caption">
           Since last month
         </Typography>
-      </Box>
+      </Box> */}
     </CardContent>
   </Card>
 );

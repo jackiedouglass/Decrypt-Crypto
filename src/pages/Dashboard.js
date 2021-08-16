@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import { Box, Container, Grid } from '@material-ui/core';
+import { Box, Container, Grid, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
@@ -16,31 +16,10 @@ import CoinCard from 'src/components/coin/CoinCard';
 import * as actions from '../actions/actions';
 
 const useStyles = makeStyles((theme) => ({
-  // paper: {
-  //   marginTop: theme.spacing(8),
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   alignItems: 'center'
-  // },
-  // logoImg: {
-  //   width: '410px'
-  // },
-  // avatar: {
-  //   margin: theme.spacing(1),
-  //   backgroundColor: theme.palette.secondary.main
-  // },
-  // form: {
-  //   width: '100%', // Fix IE 11 issue.
-  //   marginTop: theme.spacing(1)
-  // },
-  // submit: {
-  //   margin: theme.spacing(3, 0, 2),
-  //   backgroundColor: '#2A3C4A',
-  //   color: '#FFFFFF'
-  // },
-  // pageText: {
-  //   color: '#2A3C4A'
-  // }
+  addCoinBtn: {
+    width: '20%',
+    height: '50px'
+  }
 }));
 
 const mapStateToProps = (state) => ({
@@ -70,7 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const Dashboard = (props) => {
   const classes = useStyles();
-  const [addCoinModal, openAddCoinModal] = useState(true);
+  const [addCoinModal, openAddCoinModal] = useState(false);
   let totalInvested = 0;
   let portfolioBalance = 0;
 
@@ -136,10 +115,30 @@ const Dashboard = (props) => {
             <Grid item lg={3} sm={6} xl={3} xs={12}>
               <CashedOut cashedOutAmnt={props.cashedOutAmnt} />
             </Grid>
-
+          </Grid>
+          <br />
+          <center>
+            <Grid container>
+              <Grid item lg={12} sm={12} xl={12} xs={12}>
+                <Button
+                  color="primary"
+                  component="a"
+                  variant="contained"
+                  onClick={() => {
+                    openAddCoinModal(true);
+                  }}
+                  className={classes.addCoinBtn}
+                >
+                  Add New Coin
+                </Button>
+              </Grid>
+            </Grid>
+          </center>
+          <br />
+          <Grid container spacing={3}>
             {coinDisplay}
-
-            {/* <Grid item lg={8} md={12} xl={9} xs={12}>
+          </Grid>
+          {/* <Grid item lg={8} md={12} xl={9} xs={12}>
               <Sales />
             </Grid>
             <Grid item lg={4} md={6} xl={3} xs={12}>
@@ -151,7 +150,6 @@ const Dashboard = (props) => {
             <Grid item lg={8} md={12} xl={9} xs={12}>
               <LatestOrders />
             </Grid> */}
-          </Grid>
         </Container>
       </Box>
     </>
