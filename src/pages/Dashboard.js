@@ -17,32 +17,26 @@ import * as actions from '../actions/actions';
 
 const useStyles = makeStyles((theme) => ({
   addCoinBtn: {
-    width: '20%',
+    width: '200px',
     height: '50px'
   }
 }));
 
 const mapStateToProps = (state) => ({
-  quantityPopup: state.coins.quantityPopup,
-  popupWindow: state.coins.popup,
   coinList: state.coins.coinList,
   cashedOutAmnt: state.coins.cashedOutAmnt,
-  username: state.coins.username
+  email: state.coins.email
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  togglePopup: () => dispatch(actions.togglePopupActionCreator()),
   addCoin: (coinObj) => dispatch(actions.addCoinActionCreator(coinObj)),
   refreshProfits: (coinObj) =>
     dispatch(actions.refreshProfitsActionCreator(coinObj)),
-  toggleQuantityPopup: (coinCode) =>
-    dispatch(actions.toggleQuantityPopupActionCreator(coinCode)),
+  // toggleQuantityPopup: (coinCode) =>
+  //   dispatch(actions.toggleQuantityPopupActionCreator(coinCode)),
   soldQuantity: (coinObj) =>
     dispatch(actions.soldQuantityActionCreator(coinObj)),
   buyMore: (coinObj) => dispatch(actions.buyMoreActionCreator(coinObj)),
-  showChart: (coinCode) => dispatch(actions.chartPopupActionCreator(coinCode)),
-  addChart: (chartData, coinCode) =>
-    dispatch(actions.addChartActionCreator(chartData, coinCode)),
   updateUserInfo: (userData) =>
     dispatch(actions.updateUserInfoActionCreator(userData))
 });
@@ -52,6 +46,26 @@ const Dashboard = (props) => {
   const [addCoinModal, openAddCoinModal] = useState(false);
   let totalInvested = 0;
   let portfolioBalance = 0;
+
+  function refreshProfits() {
+    const reqParams = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        coinList: props.coinList,
+        email: props.email
+      })
+    };
+    fetch(
+      'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/refreshprofits',
+      reqParams
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        props.refreshProfits(data);
+      })
+      .catch((err) => console.error(err));
+  }
 
   for (let i = 0; i < props.coinList.length; i += 1) {
     const currCoin = props.coinList[i];
@@ -64,10 +78,8 @@ const Dashboard = (props) => {
     return (
       <Grid item lg={4} sm={6} xl={4} xs={12}>
         <CoinCard
-          username={props.username}
+          email={props.email}
           searchId={searchId}
-          addChart={props.addChart}
-          showChart={props.showChart}
           fullList={props.coinList}
           buyMore={props.buyMore}
           soldQuantity={props.soldQuantity}
@@ -84,7 +96,7 @@ const Dashboard = (props) => {
       <AddCoin
         addCoinModal={addCoinModal}
         openAddCoinModal={openAddCoinModal}
-        username={props.username}
+        email={props.email}
         addCoin={props.addCoin}
       />
       <Box
@@ -130,6 +142,16 @@ const Dashboard = (props) => {
                   className={classes.addCoinBtn}
                 >
                   Add New Coin
+                </Button>
+                {'   '}
+                <Button
+                  color="primary"
+                  component="a"
+                  variant="contained"
+                  onClick={refreshProfits}
+                  className={classes.addCoinBtn}
+                >
+                  Refresh Profits
                 </Button>
               </Grid>
             </Grid>

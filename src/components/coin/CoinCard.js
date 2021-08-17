@@ -47,9 +47,7 @@ const CoinCard = (props) => {
             justifyContent: 'center',
             pb: 3
           }}
-        >
-          {/* <Avatar alt="Product" src={product.media} variant="square" /> */}
-        </Box>
+        ></Box>
         <Typography
           align="center"
           color="textPrimary"

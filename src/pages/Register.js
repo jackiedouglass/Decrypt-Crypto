@@ -24,15 +24,15 @@ const Register = (props) => {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   function handleSignUp() {
-    console.log(username, password);
+    console.log(email, password);
     const signupOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ firstName, lastName, email, password })
     };
     fetch(
       'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/signup',
@@ -40,9 +40,9 @@ const Register = (props) => {
     )
       .then((data) => {
         const userData = {
-          username,
-          userCoinList: [],
-          userCashedOut: 0
+          email,
+          coinList: [],
+          cashedOutAmnt: 0
         };
         props.updateUserInfo(userData);
         navigate('/app/dashboard');
@@ -145,9 +145,9 @@ const Register = (props) => {
                   margin="normal"
                   name="email"
                   onBlur={handleBlur}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
-                  value={username}
+                  value={email}
                   variant="outlined"
                 />
                 <TextField

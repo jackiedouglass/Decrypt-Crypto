@@ -32,7 +32,7 @@ const Login = (props) => {
     const loginOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: email, password })
+      body: JSON.stringify({ email, password })
     };
     fetch(
       'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/login',
@@ -43,7 +43,7 @@ const Login = (props) => {
         if (data.status) {
           console.log(data);
           const userData = {
-            username: data.username,
+            email: data.email,
             coinList: data.CoinList,
             cashedOutAmnt: data.CashedOutAmnt
           };
@@ -62,7 +62,7 @@ const Login = (props) => {
   return (
     <>
       <Helmet>
-        <title>Login | Material Kit</title>
+        <title>Login | Decrypt Crypto</title>
       </Helmet>
       <Box
         sx={{

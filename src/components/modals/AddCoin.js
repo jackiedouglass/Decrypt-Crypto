@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AddCoin({
   addCoinModal,
   openAddCoinModal,
-  username,
+  email,
   addCoin
 }) {
   const classes = useStyles();
@@ -86,7 +86,7 @@ export default function AddCoin({
       coin,
       amntPurchased: quantity,
       price,
-      username
+      email
     };
     fetch(
       'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/addcoin',

@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
 import CoinListResults from 'src/components/coinPrices/CoinListResults';
 import CoinListToolbar from 'src/components/coinPrices/CoinListToolbar';
-import coins from 'src/__mocks__/coins';
+import coins from '../__mocks__/coins';
 
 const CoinList = () => (
   <>
