@@ -32,8 +32,6 @@ const mapDispatchToProps = (dispatch) => ({
   addCoin: (coinObj) => dispatch(actions.addCoinActionCreator(coinObj)),
   refreshProfits: (coinObj) =>
     dispatch(actions.refreshProfitsActionCreator(coinObj)),
-  // toggleQuantityPopup: (coinCode) =>
-  //   dispatch(actions.toggleQuantityPopupActionCreator(coinCode)),
   soldQuantity: (coinObj) =>
     dispatch(actions.soldQuantityActionCreator(coinObj)),
   buyMore: (coinObj) => dispatch(actions.buyMoreActionCreator(coinObj)),
@@ -84,6 +82,7 @@ const Dashboard = (props) => {
           buyMore={props.buyMore}
           soldQuantity={props.soldQuantity}
           coinInfo={coin}
+          cashedOutAmnt={props.cashedOutAmnt}
         />
       </Grid>
     );

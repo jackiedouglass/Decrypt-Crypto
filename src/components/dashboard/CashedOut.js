@@ -26,8 +26,8 @@ const CashedOut = (props) => (
           <Avatar
             sx={{
               backgroundColor: orange[600],
-              height: 56,
-              width: 56
+              height: 46,
+              width: 46
             }}
           >
             <InsertChartIcon />

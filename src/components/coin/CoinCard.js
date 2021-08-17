@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/styles';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import ShowChart from '../modals/ShowChart';
+import ChangeQuantity from '../modals/ChangeQuantity';
 
 const useStyles = makeStyles((theme) => ({
   chartDisplay: { minWidth: '800px' }
@@ -22,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
 const CoinCard = (props) => {
   const classes = useStyles();
   const [chart, showChart] = useState(false);
-  console.log('coinInfo on CoinCard: ', props.coinInfo);
+  const [changeQuantity, showQuantityModal] = useState(false);
+
   return (
     <Card
       sx={{
@@ -38,6 +40,20 @@ const CoinCard = (props) => {
           coinInfo={props.coinInfo}
           searchId={props.searchId}
           className={classes.chartDisplay}
+        />
+      )}
+      {changeQuantity && (
+        <ChangeQuantity
+          changeQuantity={changeQuantity}
+          showQuantityModal={showQuantityModal}
+          coinInfo={props.coinInfo}
+          searchId={props.searchId}
+          className={classes.chartDisplay}
+          email={props.email}
+          fullList={props.fullList}
+          buyMore={props.buyMore}
+          soldQuantity={props.soldQuantity}
+          cashedOutAmnt={props.cashedOutAmnt}
         />
       )}
       <CardContent>
@@ -122,7 +138,12 @@ const CoinCard = (props) => {
               display: 'flex'
             }}
           >
-            <Button>
+            <Button
+              onClick={() => {
+                showQuantityModal(true);
+                console.log(changeQuantity);
+              }}
+            >
               <AccountBalanceIcon color="action" />
               <Typography
                 color="textSecondary"

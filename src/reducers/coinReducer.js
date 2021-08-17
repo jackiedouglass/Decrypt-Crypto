@@ -43,19 +43,6 @@ const coinReducer = (state = initialState, action) => {
       return { ...state, coinList };
     }
 
-    // case types.TOGGLE_QUANTITY_POPUP: {
-    //   coinList = state.coinList.slice();
-    //   for (let i = 0; i < coinList.length; i += 1) {
-    //     if (coinList[i].coinCode === action.payload) {
-    //       coinList[i].quantityPopup = !coinList[i].quantityPopup;
-    //     }
-    //   }
-    //   return {
-    //     ...state,
-    //     coinList
-    //   };
-    // }
-
     case types.REFRESH_PROFITS: {
       coinList = action.payload;
       return {

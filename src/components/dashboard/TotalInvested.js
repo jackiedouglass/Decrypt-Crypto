@@ -26,8 +26,8 @@ const TotalInvested = (props) => (
           <Avatar
             sx={{
               backgroundColor: red[600],
-              height: 56,
-              width: 56
+              height: 46,
+              width: 46
             }}
           >
             <MoneyIcon />

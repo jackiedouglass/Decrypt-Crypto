@@ -18,8 +18,8 @@ const PortfolioProfits = (props) => (
           <Avatar
             sx={{
               backgroundColor: indigo[600],
-              height: 56,
-              width: 56
+              height: 46,
+              width: 46
             }}
           >
             <AttachMoneyIcon />
