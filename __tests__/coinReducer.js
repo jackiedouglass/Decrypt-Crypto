@@ -149,4 +149,84 @@ describe('Coin Reducer', () => {
       ]);
     });
   });
+  describe('REFRESH_PROFITS', () => {
+    const action = {
+      type: 'REFRESH_PROFITS',
+      payload: [
+        {
+          name: 'Ethereum',
+          coinCode: 'ethbtc',
+          coinQuantity: 0.1786,
+          purchasePrice: 3000,
+          currPrice: 4000,
+          coinBalance: 714.4,
+          coinProfit: 178.6,
+          totalCoinInvested: 535.8
+        },
+        {
+          name: 'Bitcoin',
+          coinCode: 'btcbtc',
+          coinQuantity: 0.0003,
+          purchasePrice: 30000,
+          currPrice: 50000,
+          coinBalance: 15,
+          coinProfit: 6,
+          totalCoinInvested: 9
+        }
+      ]
+    };
+    it("Updates each coin's profit amount", () => {
+      state = {
+        email: 'test@test.com',
+        coinList: [
+          {
+            name: 'Ethereum',
+            coinCode: 'ethbtc',
+            coinQuantity: 0.1786,
+            purchasePrice: 3000,
+            currPrice: 3191.821708880181,
+            coinBalance: 0.1786 * 3191.821708880181,
+            coinProfit: 0.1786 * 3191.821708880181 - 0.1786 * 3000,
+            totalCoinInvested: 0.1786 * 3000
+          },
+          {
+            name: 'Bitcoin',
+            coinCode: 'btcbtc',
+            coinQuantity: 0.0003,
+            purchasePrice: 30000,
+            currPrice: 46327.3,
+            coinBalance: 0.0003 * 46327.3,
+            coinProfit: 0.0003 * 46327.3 - 0.0003 * 30000,
+            totalCoinInvested: 0.0003 * 30000
+          }
+        ],
+        cashedOutAmnt: 0
+      };
+      const { coinList } = subject(state, action);
+      expect(coinList).toEqual([
+        {
+          name: 'Ethereum',
+          coinCode: 'ethbtc',
+          coinQuantity: 0.1786,
+          purchasePrice: 3000,
+          currPrice: 4000,
+          coinBalance: 714.4,
+          coinProfit: 178.6,
+          totalCoinInvested: 535.8
+        },
+        {
+          name: 'Bitcoin',
+          coinCode: 'btcbtc',
+          coinQuantity: 0.0003,
+          purchasePrice: 30000,
+          currPrice: 50000,
+          coinBalance: 15,
+          coinProfit: 6,
+          totalCoinInvested: 9
+        }
+      ]);
+    });
+  });
+  describe('SOLD_QUANTITY', () => {});
+  describe('BUY_MORE', () => {});
 });

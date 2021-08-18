@@ -17,9 +17,9 @@ import {
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
-const CoinListResults = ({ coins, ...rest }) => {
+const CoinListResults = ({ coins, coinList, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(50);
   const [page, setPage] = useState(0);
 
   const handleSelectAll = (event) => {
@@ -87,61 +87,61 @@ const CoinListResults = ({ coins, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
+                <TableCell>Label</TableCell>
                 <TableCell>Name</TableCell>
-                {/* <TableCell>Email</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Registration date</TableCell> */}
+                <TableCell>Current Price</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {coins.slice(0, limit).map((customer) => (
-                <TableRow
-                  hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
-                      value="true"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{
-                        alignItems: 'center',
-                        display: 'flex'
-                      }}
-                    >
-                      <Typography color="textPrimary" variant="body1">
-                        {customer.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  {/* <TableCell>{customer.email}</TableCell>
-                  <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell>
-                  <TableCell>{customer.phone}</TableCell>
-                  <TableCell>
-                    {moment(customer.createdAt).format('DD/MM/YYYY')}
-                  </TableCell> */}
-                </TableRow>
-              ))}
+              {coinList
+                .slice(page * limit, page * limit + limit)
+                .map((customer) => (
+                  <TableRow
+                    hover
+                    key={customer.label}
+                    selected={
+                      selectedCustomerIds.indexOf(customer.label) !== -1
+                    }
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={
+                          selectedCustomerIds.indexOf(customer.label) !== -1
+                        }
+                        onChange={(event) =>
+                          handleSelectOne(event, customer.label)
+                        }
+                        value="true"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          alignItems: 'center',
+                          display: 'flex'
+                        }}
+                      >
+                        <Typography color="textPrimary" variant="body1">
+                          {customer.label}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{customer.name}</TableCell>
+                    <TableCell>${customer.currentPrice}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={coins.length}
+        count={coinList.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
         rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[50, 100, 250]}
       />
     </Card>
   );
