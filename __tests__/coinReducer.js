@@ -227,6 +227,122 @@ describe('Coin Reducer', () => {
       ]);
     });
   });
-  describe('SOLD_QUANTITY', () => {});
-  describe('BUY_MORE', () => {});
+  describe('SOLD_QUANTITY', () => {
+    const action = {
+      type: 'SOLD_QUANTITY',
+      payload: {
+        coinCode: 'ethbtc',
+        quantitySold: 0.1,
+        pricePoint: 4000
+      }
+    };
+    it('Updates quantity and profits after sellling', () => {
+      state = {
+        email: 'test@test.com',
+        coinList: [
+          {
+            name: 'Ethereum',
+            coinCode: 'ethbtc',
+            coinQuantity: 0.1786,
+            purchasePrice: 3000,
+            currPrice: 3191,
+            coinBalance: 569,
+            coinProfit: 33.2,
+            totalCoinInvested: 535.8
+          },
+          {
+            name: 'Bitcoin',
+            coinCode: 'btcbtc',
+            coinQuantity: 0.0003,
+            purchasePrice: 30000,
+            currPrice: 46327.3,
+            coinBalance: 13.89819,
+            coinProfit: 4.89819,
+            totalCoinInvested: 9
+          }
+        ],
+        cashedOutAmnt: 0
+      };
+      const { coinList, cashedOutAmnt } = subject(state, action);
+      expect(cashedOutAmnt).toEqual(
+        (state.cashedOutAmnt +=
+          action.payload.quantitySold * action.payload.pricePoint)
+      );
+      for (let i = 0; i < coinList.length; i += 1) {
+        if (coinList[i].coinCode === action.payload.coinCode) {
+          const coin = coinList[i];
+          const expectedNewQuant = 0.1786 - action.payload.quantitySold;
+          // check quantity subtracted
+          expect(coin.coinQuantity).toEqual(expectedNewQuant);
+          // check coinBalance is new quantity times current price
+          expect(coin.coinBalance).toEqual(expectedNewQuant * coin.currPrice);
+          // check total amount invested is orig. minus quantity sold * price sold at
+          expect(coin.totalCoinInvested).toEqual(
+            535.8 - action.payload.quantitySold * action.payload.pricePoint
+          );
+          // check coinProfit is new coin balance - total coin invested
+          expect(coin.coinProfit).toEqual(
+            coin.coinBalance - coin.totalCoinInvested
+          );
+        }
+      }
+    });
+  });
+  describe('BUY_MORE', () => {
+    const action = {
+      type: 'BUY_MORE',
+      payload: {
+        coinCode: 'ethbtc',
+        quantityBought: 0.1,
+        pricePoint: 2000
+      }
+    };
+    it('Updates quantity and profits after purchasing more', () => {
+      state = {
+        email: 'test@test.com',
+        coinList: [
+          {
+            name: 'Ethereum',
+            coinCode: 'ethbtc',
+            coinQuantity: 0.1786,
+            purchasePrice: 3000,
+            currPrice: 3191,
+            coinBalance: 569,
+            coinProfit: 33.2,
+            totalCoinInvested: 535.8
+          },
+          {
+            name: 'Bitcoin',
+            coinCode: 'btcbtc',
+            coinQuantity: 0.0003,
+            purchasePrice: 30000,
+            currPrice: 46327.3,
+            coinBalance: 13.89819,
+            coinProfit: 4.89819,
+            totalCoinInvested: 9
+          }
+        ],
+        cashedOutAmnt: 0
+      };
+      const { coinList } = subject(state, action);
+      for (let i = 0; i < coinList.length; i += 1) {
+        if (coinList[i].coinCode === action.payload.coinCode) {
+          const coin = coinList[i];
+          const expectedNewQuant = 0.1786 + action.payload.quantityBought;
+          // check quantity added
+          expect(coin.coinQuantity).toEqual(expectedNewQuant);
+          // check coinBalance is new quantity times current price
+          expect(coin.coinBalance).toEqual(expectedNewQuant * coin.currPrice);
+          // check total amount invested is orig. plus quantity sold * price sold at
+          expect(coin.totalCoinInvested).toEqual(
+            535.8 + action.payload.quantityBought * action.payload.pricePoint
+          );
+          // check coinProfit is new coin balance - total coin invested
+          expect(coin.coinProfit).toEqual(
+            coin.coinBalance - coin.totalCoinInvested
+          );
+        }
+      }
+    });
+  });
 });
