@@ -41,7 +41,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const Dashboard = (props) => {
   const classes = useStyles();
-  const [addCoinModal, openAddCoinModal] = useState(false);
+  // const [addCoinModal, openAddCoinModal] = useState(false);
   let totalInvested = 0;
   let portfolioBalance = 0;
 
@@ -92,12 +92,12 @@ const Dashboard = (props) => {
       <Helmet>
         <title>Dashboard | Decrypt Crypto</title>
       </Helmet>
-      <AddCoin
+      {/* <AddCoin
         addCoinModal={addCoinModal}
         openAddCoinModal={openAddCoinModal}
         email={props.email}
         addCoin={props.addCoin}
-      />
+      /> */}
       <Box
         sx={{
           backgroundColor: 'background.default',
@@ -131,7 +131,7 @@ const Dashboard = (props) => {
           <center>
             <Grid container>
               <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <Button
+                {/* <Button
                   color="primary"
                   component="a"
                   variant="contained"
@@ -141,8 +141,8 @@ const Dashboard = (props) => {
                   className={classes.addCoinBtn}
                 >
                   Add New Coin
-                </Button>
-                {'   '}
+                </Button> */}
+                {/* {'   '} */}
                 <Button
                   color="primary"
                   component="a"

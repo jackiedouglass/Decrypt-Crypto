@@ -1,5 +1,5 @@
 import Dialog from '@material-ui/core/Dialog';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -7,48 +7,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 
 const useStyles = makeStyles((theme) => ({
-  // paper: {
-  //   marginTop: theme.spacing(8),
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   alignItems: 'center'
-  // },
-  // logoImg: {
-  //   width: '410px'
-  // },
-  // avatar: {
-  //   margin: theme.spacing(1),
-  //   backgroundColor: theme.palette.secondary.main
-  // },
-  // form: {
-  //   width: '100%', // Fix IE 11 issue.
-  //   marginTop: theme.spacing(1)
-  // },
-  // submit: {
-  //   margin: theme.spacing(3, 0, 2),
-  //   backgroundColor: '#2A3C4A',
-  //   color: '#FFFFFF'
-  // },
-  // pageText: {
-  //   color: '#2A3C4A'
-  // }
   container: {
     display: 'flex',
     flexWrap: 'wrap'
   },
   formControl: {
-    // margin: theme.spacing(1),
     width: '60%'
   },
   textField: {
-    // margin: theme.spacing(1),
     width: '60%'
   }
 }));
@@ -57,13 +25,26 @@ export default function AddCoin({
   addCoinModal,
   openAddCoinModal,
   email,
-  addCoin
+  addCoin,
+  newCoinId,
+  coinList
 }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [coin, setCoin] = useState('');
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
+  const [errorCoin, showErrorCoin] = useState(false);
+
+  useEffect(() => {
+    showErrorCoin(false);
+    for (let i = 0; i < coinList.length; i += 1) {
+      if (coinList[i].name === newCoinId.coinInfo.name) {
+        showErrorCoin(true);
+      }
+    }
+    setPrice(newCoinId.coinInfo.currentPrice);
+  }, [newCoinId]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -83,27 +64,29 @@ export default function AddCoin({
 
   const handleSubmit = () => {
     const bodyObj = {
-      coin,
+      coin: newCoinId.id,
       amntPurchased: quantity,
       price,
       email
     };
-    fetch(
-      'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/addcoin',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bodyObj)
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        addCoin({ ...data, coinCode: bodyObj.coin });
-        openAddCoinModal(false);
-      })
-      .catch((error) => console.log('Error: ', error));
+    if (!errorCoin) {
+      fetch(
+        'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/addcoin',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bodyObj)
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          addCoin({ ...data, coinCode: bodyObj.coin });
+          openAddCoinModal(false);
+        })
+        .catch((error) => console.log('Error: ', error));
+    }
   };
   return (
     <Dialog
@@ -113,56 +96,30 @@ export default function AddCoin({
       }}
       aria-labelledby="form-dialog-title"
     >
-      <DialogTitle id="form-dialog-title" className={classes.pageText}>
-        Add New Coin to Portfolio
+      {errorCoin && (
+        <DialogContent>
+          <DialogContentText style={{ color: 'red' }}>
+            {' '}
+            You've already added this coin to your portfolio. If you wish to
+            update the quantity, please do so on the Dashboard page.
+          </DialogContentText>
+        </DialogContent>
+      )}
+      <DialogTitle
+        id="form-dialog-title"
+        className={classes.pageText}
+        variant="h3"
+      >
+        Add {newCoinId.coinInfo.name} to Portfolio
       </DialogTitle>
       <DialogContent>
         <DialogContentText className={classes.pageText}>
-          Enter the coin you purchased, what price you purchased it at, and how
-          much you bought below.
+          If necessary, update the price you purchased {newCoinId.coinInfo.name}{' '}
+          at, and how much you bought below.
         </DialogContentText>
-        {/* {incorrectVerificationCode && (
-        <Typography style={{ color: 'red' }}>
-          Please double-check you entered in the correct verification code.
-        </Typography>
-      )} */}
         <br />
         <form className={classes.container}>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-dialog-select-label">
-              Coin Purchased
-            </InputLabel>
-            <Select
-              labelId="demo-dialog-select-label"
-              id="demo-dialog-select"
-              value={coin}
-              onChange={(e) => {
-                setCoin(e.target.value);
-              }}
-              input={<Input />}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={'ethbtc'}>Ethereum (ETH)</MenuItem>
-              <MenuItem value={'btcbtc'}>Bitcoin (BTC)</MenuItem>
-              <MenuItem value={'ltcbtc'}>Litecoin (LTC)</MenuItem>
-              <MenuItem value={'adabtc'}>Cardano (ADA)</MenuItem>
-              <MenuItem value={'dotbtc'}>Polkadot (DOT)</MenuItem>
-              <MenuItem value={'bchbtc'}>Bitcoin Cash (bchbtc)</MenuItem>
-              <MenuItem value={'xlmbtc'}>Stellar (XLM)</MenuItem>
-              <MenuItem value={'linkbtc'}>Chainlink (LINK)</MenuItem>
-              <MenuItem value={'bnbbtc'}>Binance Coin (BNB)</MenuItem>
-              <MenuItem value={'usdtbtc'}>Tether (USDT)</MenuItem>
-              <MenuItem value={'xmrbtc'}>Monero (XMR)</MenuItem>
-              <MenuItem value={'usdcbtc'}>USD Coin (USDC)</MenuItem>
-              <MenuItem value={'hbarbtc'}>Hedera Hashgraph (HBAR)</MenuItem>
-            </Select>
-            <br />
-          </FormControl>
-
           <TextField
-            autoFocus
             margin="dense"
             id="quantity"
             label="Amount Purchased"
@@ -171,12 +128,12 @@ export default function AddCoin({
           />
           <br />
           <TextField
-            autoFocus
             margin="dense"
             id="price"
             label="Price Purchased At"
             onChange={handlePriceChange}
             className={classes.textField}
+            value={price}
           />
         </form>
       </DialogContent>

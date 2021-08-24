@@ -33,7 +33,7 @@ const items = [
   {
     href: '/app/prices',
     icon: AttachMoneyIcon,
-    title: 'Prices'
+    title: 'Add New Coin'
   }
   // {
   //   href: '/app/account',

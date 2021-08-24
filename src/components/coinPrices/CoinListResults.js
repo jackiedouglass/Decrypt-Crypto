@@ -17,45 +17,38 @@ import {
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
-const CoinListResults = ({ coins, coinList, ...rest }) => {
+const CoinListResults = ({ coins, coinList, setCoinId, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(50);
   const [page, setPage] = useState(0);
 
-  const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
-
-    if (event.target.checked) {
-      newSelectedCustomerIds = coins.map((customer) => customer.id);
-    } else {
-      newSelectedCustomerIds = [];
-    }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
-  };
-
-  const handleSelectOne = (event, id) => {
+  const handleSelectOne = (event, id, coinInfo) => {
     const selectedIndex = selectedCustomerIds.indexOf(id);
     let newSelectedCustomerIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds,
-        id
-      );
+      newSelectedCustomerIds = newSelectedCustomerIds.concat(id);
+      const coinSearchId = id
+        .replace('USD', 'btc')
+        .toLowerCase()
+        .replace('/', '');
+      setCoinId({ id: coinSearchId, coinInfo });
     } else if (selectedIndex === 0) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(
         selectedCustomerIds.slice(1)
       );
+      setCoinId({ id: 'first', coinInfo });
     } else if (selectedIndex === selectedCustomerIds.length - 1) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(
         selectedCustomerIds.slice(0, -1)
       );
+      setCoinId({ id: 'first', coinInfo });
     } else if (selectedIndex > 0) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(
         selectedCustomerIds.slice(0, selectedIndex),
         selectedCustomerIds.slice(selectedIndex + 1)
       );
+      setCoinId({ id: 'first', coinInfo });
     }
 
     setSelectedCustomerIds(newSelectedCustomerIds);
@@ -76,18 +69,8 @@ const CoinListResults = ({ coins, coinList, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedCustomerIds.length === coins.length}
-                    color="primary"
-                    indeterminate={
-                      selectedCustomerIds.length > 0 &&
-                      selectedCustomerIds.length < coins.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell>
-                <TableCell>Label</TableCell>
+                <TableCell padding="checkbox"></TableCell>
+                <TableCell>Coin Code</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Current Price</TableCell>
               </TableRow>
@@ -109,7 +92,7 @@ const CoinListResults = ({ coins, coinList, ...rest }) => {
                           selectedCustomerIds.indexOf(customer.label) !== -1
                         }
                         onChange={(event) =>
-                          handleSelectOne(event, customer.label)
+                          handleSelectOne(event, customer.label, customer)
                         }
                         value="true"
                       />

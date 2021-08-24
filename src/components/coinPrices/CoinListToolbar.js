@@ -11,10 +11,10 @@ import { Search as SearchIcon } from 'react-feather';
 
 const CoinListToolbar = (props) => (
   <Box {...props}>
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 8 }}>
       <Card>
         <CardContent>
-          <Box sx={{ maxWidth: 500 }}>
+          <Box sx={{ maxWidth: 600 }}>
             <TextField
               fullWidth
               InputProps={{
@@ -29,6 +29,21 @@ const CoinListToolbar = (props) => (
               placeholder="Search"
               variant="outlined"
             />
+          </Box>
+          <Box sx={{ maxWidth: 300 }}>
+            <Button
+              color="primary"
+              component="a"
+              variant="contained"
+              onClick={() => {
+                if (props.newCoinId.id !== 'first') {
+                  props.openAddCoinModal(true);
+                }
+              }}
+              // className={classes.addCoinBtn}
+            >
+              Add New Coin
+            </Button>
           </Box>
         </CardContent>
       </Card>
