@@ -43,7 +43,6 @@ export default function AddCoin({
         showErrorCoin(true);
       }
     }
-    setPrice(newCoinId.coinInfo.currentPrice);
   }, [newCoinId]);
 
   const handleClickOpen = () => {
@@ -133,7 +132,7 @@ export default function AddCoin({
             label="Price Purchased At"
             onChange={handlePriceChange}
             className={classes.textField}
-            value={price}
+            defaultValue={newCoinId.coinInfo.currentPrice}
           />
         </form>
       </DialogContent>
