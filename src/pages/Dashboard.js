@@ -92,12 +92,6 @@ const Dashboard = (props) => {
       <Helmet>
         <title>Dashboard | Decrypt Crypto</title>
       </Helmet>
-      {/* <AddCoin
-        addCoinModal={addCoinModal}
-        openAddCoinModal={openAddCoinModal}
-        email={props.email}
-        addCoin={props.addCoin}
-      /> */}
       <Box
         sx={{
           backgroundColor: 'background.default',

@@ -59,7 +59,7 @@ const CoinList = (props) => {
   return (
     <>
       <Helmet>
-        <title>Coin Prices | Decrypt Crypto</title>
+        <title>Add Coin | Decrypt Crypto</title>
       </Helmet>
       {newCoinId.id !== 'first' ? (
         <AddCoin
