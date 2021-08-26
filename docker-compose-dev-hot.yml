@@ -1,0 +1,14 @@
+version: '3'
+services:
+  dev:
+    image: decrypt-crypto/cd-dev
+    container_name: 'mm-dev-hot'
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    command: npm start
+
+volumes:
+  node_modules:
