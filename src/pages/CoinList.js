@@ -27,13 +27,35 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const CoinList = (props) => {
-  const [coinList, setCoinList] = useState([]);
+  const [subsetCoinList, setCoinList] = useState([]);
   const [fullCoinList, setFullCoinList] = useState([]);
   const [newCoinId, setCoinId] = useState({
     id: 'first',
     coinInfo: { name: 'first', currentPrice: 3218.26165732303 }
   });
   const [addCoinModal, openAddCoinModal] = useState(false);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const newCoinList = [];
+    if (search === '') {
+      setCoinList(fullCoinList);
+      return;
+    }
+    for (let i = 0; i < fullCoinList.length; i += 1) {
+      if (
+        fullCoinList[i].name
+          .replace('-', '')
+          .slice(0, search.length)
+          .toLowerCase() === search
+      ) {
+        if (!newCoinList.includes(fullCoinList[i])) {
+          newCoinList.push(fullCoinList[i]);
+        }
+      }
+    }
+    setCoinList(newCoinList);
+  }, [search]);
 
   useEffect(() => {
     fetch(
@@ -51,7 +73,7 @@ const CoinList = (props) => {
         });
 
         mappedCoins.sort((coin1, coin2) => coin2.volume - coin1.volume);
-
+        setFullCoinList(mappedCoins);
         setCoinList(mappedCoins);
       })
       .catch((err) => console.error(err));
@@ -84,12 +106,15 @@ const CoinList = (props) => {
           <CoinListToolbar
             openAddCoinModal={openAddCoinModal}
             newCoinId={newCoinId}
+            setSearch={setSearch}
+            search={search}
           />
           <Box sx={{ pt: 3 }}>
             <CoinListResults
-              coins={coins}
-              coinList={coinList}
+              coins={subsetCoinList}
+              coinList={subsetCoinList}
               setCoinId={setCoinId}
+              search={search}
             />
           </Box>
         </Container>

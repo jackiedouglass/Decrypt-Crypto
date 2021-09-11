@@ -31,6 +31,11 @@ const useStyles = makeStyles((theme) => ({
 
 const CoinListToolbar = (props) => {
   const classes = useStyles();
+
+  const handleSearch = (word) => {
+    props.setSearch(word.toLowerCase().replace('-', ''));
+  };
+
   return (
     <div>
       <Card>
@@ -51,6 +56,9 @@ const CoinListToolbar = (props) => {
                 }}
                 placeholder="Search"
                 variant="outlined"
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
               />
             </Grid>
             <Grid container item sm={4} xs={4} md={4} lg={4}>

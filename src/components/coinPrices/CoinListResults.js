@@ -22,6 +22,8 @@ const CoinListResults = ({ coins, coinList, setCoinId, ...rest }) => {
   const [limit, setLimit] = useState(50);
   const [page, setPage] = useState(0);
 
+  console.log('Coin List: ', coinList);
+
   const handleSelectOne = (event, id, coinInfo) => {
     const selectedIndex = selectedCustomerIds.indexOf(id);
     let newSelectedCustomerIds = [];
