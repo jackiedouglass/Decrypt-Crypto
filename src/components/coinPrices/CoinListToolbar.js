@@ -5,7 +5,8 @@ import {
   CardContent,
   TextField,
   InputAdornment,
-  SvgIcon
+  SvgIcon,
+  Grid
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Search as SearchIcon } from 'react-feather';
@@ -18,24 +19,27 @@ const useStyles = makeStyles((theme) => ({
   // formControl: {
   //   width: '60%'
   // },
-  textField: {
-    width: '60%'
-  },
-  addCoinBtn: {
-    width: '40%'
-  }
+  // textField: {
+  //   width: '50%',
+  //   paddingRight: '400px'
+  // },
+  // addCoinBtn: {
+  //   width: '20%',
+  //   paddingLeft: '70px'
+  // }
 }));
 
 const CoinListToolbar = (props) => {
   const classes = useStyles();
   return (
-    <Box {...props}>
-      <Box sx={{ mt: 8 }}>
-        <Card>
-          <CardContent>
-            <Box sx={{ maxWidth: 600 }}>
+    <div>
+      <Card>
+        <CardContent>
+          <Grid container spacing={2}>
+            <Grid container item sm={8} xs={8} md={8} lg={8}>
               <TextField
                 className={classes.textField}
+                fullWidth
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -48,10 +52,13 @@ const CoinListToolbar = (props) => {
                 placeholder="Search"
                 variant="outlined"
               />
+            </Grid>
+            <Grid container item sm={4} xs={4} md={4} lg={4}>
               <Button
                 color="primary"
                 component="a"
                 variant="contained"
+                fullWidth
                 onClick={() => {
                   if (props.newCoinId.id !== 'first') {
                     props.openAddCoinModal(true);
@@ -61,12 +68,11 @@ const CoinListToolbar = (props) => {
               >
                 Add New Coin
               </Button>
-            </Box>
-            <Box sx={{ maxWidth: 300 }}></Box>
-          </CardContent>
-        </Card>
-      </Box>
-    </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

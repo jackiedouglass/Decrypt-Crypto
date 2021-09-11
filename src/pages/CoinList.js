@@ -28,6 +28,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const CoinList = (props) => {
   const [coinList, setCoinList] = useState([]);
+  const [fullCoinList, setFullCoinList] = useState([]);
   const [newCoinId, setCoinId] = useState({
     id: 'first',
     coinInfo: { name: 'first', currentPrice: 3218.26165732303 }
