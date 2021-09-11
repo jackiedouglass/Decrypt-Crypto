@@ -1,7 +1,7 @@
 FROM node:10.1
 WORKDIR /app
 COPY . /app
-RUN npm install
+RUN yarn
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
