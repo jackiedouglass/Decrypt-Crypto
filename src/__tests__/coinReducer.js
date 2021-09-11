@@ -1,5 +1,5 @@
-import subject from '../src/reducers/coinReducer';
 import 'regenerator-runtime/runtime';
+import subject from '../reducers/coinReducer';
 
 describe('Coin Reducer', () => {
   let state;
