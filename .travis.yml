@@ -6,7 +6,7 @@ dist: xenial
 before_script:
   - pip install --upgrade pip
   - pip install docker-compose
-  - docker build -t decrypt/crypto/cd-dev -f Dockerfile-dev .
+  # - docker build -t decrypt/crypto/cd-dev -f Dockerfile-dev .
 
 script:
   - docker-compose -f docker-compose-test.yml up --abort-on-container-exit
