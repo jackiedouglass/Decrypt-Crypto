@@ -206,7 +206,7 @@ const Register = (props) => {
                 </Box>
                 <Typography color="textSecondary" variant="body1">
                   Have an account?{' '}
-                  <Link component={RouterLink} to="/login" variant="h6">
+                  <Link component={RouterLink} to="/" variant="h6">
                     Sign in
                   </Link>
                 </Typography>

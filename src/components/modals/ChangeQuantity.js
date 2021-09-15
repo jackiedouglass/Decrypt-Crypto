@@ -52,6 +52,7 @@ export default function ChangeQuantity({
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
   const [selectedValue, setSelectedValue] = useState('sold');
+  const [errorQuantity, showErrorQuantity] = useState(false);
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -74,7 +75,11 @@ export default function ChangeQuantity({
   });
 
   const handleSubmit = () => {
-    // console.log(coinInfo.name, quantity, price, email, selectedValue);
+    if (quantity > coinInfo.coinQuantity && selectedValue === 'sold') {
+      showErrorQuantity(true);
+      return;
+    }
+    if (price === 0 || quantity === 0) return;
     let bodyObj = {};
     if (selectedValue === 'sold') {
       bodyObj.coinCode = coinInfo.coinCode;
@@ -103,7 +108,6 @@ export default function ChangeQuantity({
     } else {
       updateObj.cashedOutAmnt = Number(cashedOutAmnt);
     }
-    console.log('inside handle database: ', updateObj);
     fetch(
       'https://3mi5k0hgr1.execute-api.us-east-2.amazonaws.com/dev/updatequantity',
       {
@@ -164,6 +168,7 @@ export default function ChangeQuantity({
               name="quantity"
               value={selectedValue}
               onChange={handleChange}
+              required={true}
             >
               <FormControlLabel value="sold" control={<Radio />} label="Sold" />
               <FormControlLabel
@@ -173,6 +178,15 @@ export default function ChangeQuantity({
               />
             </RadioGroup>
           </div>
+          {errorQuantity && (
+            <DialogContent>
+              <DialogContentText style={{ color: 'red' }}>
+                {' '}
+                You don't have enough in your portfolio to sell this much,
+                please update the entered quantity.
+              </DialogContentText>
+            </DialogContent>
+          )}
           <TextField
             autoFocus
             margin="dense"
@@ -180,6 +194,8 @@ export default function ChangeQuantity({
             label="Amount Purchased/Sold"
             onChange={handleQuantityChange}
             className={classes.textField}
+            required={true}
+            helperText={'Please enter the quantity purchased/sold.'}
           />
 
           <TextField
@@ -189,6 +205,8 @@ export default function ChangeQuantity({
             label="Price Purchased/Sold At"
             onChange={handlePriceChange}
             className={classes.textField}
+            helperText={'Please enter the price purchased/sold at.'}
+            required={true}
           />
         </form>
       </DialogContent>

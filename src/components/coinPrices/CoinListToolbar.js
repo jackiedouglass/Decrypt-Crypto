@@ -11,23 +11,7 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import { Search as SearchIcon } from 'react-feather';
 
-const useStyles = makeStyles((theme) => ({
-  // container: {
-  //   display: 'flex',
-  //   flexWrap: 'wrap'
-  // },
-  // formControl: {
-  //   width: '60%'
-  // },
-  // textField: {
-  //   width: '50%',
-  //   paddingRight: '400px'
-  // },
-  // addCoinBtn: {
-  //   width: '20%',
-  //   paddingLeft: '70px'
-  // }
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 const CoinListToolbar = (props) => {
   const classes = useStyles();

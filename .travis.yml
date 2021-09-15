@@ -7,13 +7,7 @@ before_install:
 # script:
 # - docker build -t decrypt/crypto/cd-dev -f Dockerfile-dev .
 # - docker-compose -f docker-compose-test.yml up --abort-on-container-exit
-# - python3 -VV
-# - pip -V
-# before_deploy:
-#   - pip install --upgrade pip
-#   # - python3 -m pip install --user awscli
-#   # - python3 -m pip install --user awsebcli
-#   - export PATH=$PATH:$HOME/.local/bin
+
 # env:
 #   global:
 #     - PATH=/opt/python/3.7.1/bin:$PATH

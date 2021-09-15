@@ -69,6 +69,10 @@ const coinReducer = (state = initialState, action) => {
             Number(coinList[i].coinBalance) -
             Number(coinList[i].totalCoinInvested);
         }
+        if (coinList[i].coinQuantity <= 0) {
+          coinList.splice(i, 1);
+          break;
+        }
       }
       return {
         ...state,

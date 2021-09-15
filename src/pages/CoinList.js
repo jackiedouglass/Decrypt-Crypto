@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Box, Container } from '@material-ui/core';
 import CoinListResults from 'src/components/coinPrices/CoinListResults';
 import CoinListToolbar from 'src/components/coinPrices/CoinListToolbar';
@@ -36,7 +36,7 @@ const CoinList = (props) => {
   const [addCoinModal, openAddCoinModal] = useState(false);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
+  useMemo(() => {
     const newCoinList = [];
     if (search === '') {
       setCoinList(fullCoinList);
@@ -55,6 +55,7 @@ const CoinList = (props) => {
       }
     }
     setCoinList(newCoinList);
+    return;
   }, [search]);
 
   useEffect(() => {
@@ -68,13 +69,15 @@ const CoinList = (props) => {
             name: coinObj.Name,
             currentPrice: coinObj.Price,
             label: coinObj.Label,
-            volume: coinObj.Volume_24h
+            volume: coinObj.Volume_24h,
+            key: `${coinObj.Name}${i}`
           };
         });
 
         mappedCoins.sort((coin1, coin2) => coin2.volume - coin1.volume);
         setFullCoinList(mappedCoins);
         setCoinList(mappedCoins);
+        return;
       })
       .catch((err) => console.error(err));
   }, []);

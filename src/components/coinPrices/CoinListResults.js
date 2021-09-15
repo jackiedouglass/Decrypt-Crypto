@@ -22,8 +22,6 @@ const CoinListResults = ({ coins, coinList, setCoinId, ...rest }) => {
   const [limit, setLimit] = useState(50);
   const [page, setPage] = useState(0);
 
-  console.log('Coin List: ', coinList);
-
   const handleSelectOne = (event, id, coinInfo) => {
     const selectedIndex = selectedCustomerIds.indexOf(id);
     let newSelectedCustomerIds = [];
@@ -80,10 +78,10 @@ const CoinListResults = ({ coins, coinList, setCoinId, ...rest }) => {
             <TableBody>
               {coinList
                 .slice(page * limit, page * limit + limit)
-                .map((customer) => (
+                .map((customer, i) => (
                   <TableRow
                     hover
-                    key={customer.label}
+                    key={customer.key}
                     selected={
                       selectedCustomerIds.indexOf(customer.label) !== -1
                     }

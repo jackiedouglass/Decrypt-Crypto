@@ -118,7 +118,9 @@ const Dashboard = (props) => {
               />
             </Grid>
             <Grid item lg={3} sm={6} xl={3} xs={12}>
-              <CashedOut cashedOutAmnt={props.cashedOutAmnt} />
+              <CashedOut
+                cashedOutAmnt={Number(props.cashedOutAmnt).toFixed(4)}
+              />
             </Grid>
           </Grid>
           <br />
